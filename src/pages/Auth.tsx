@@ -11,27 +11,30 @@ import { useLoginMutation, useSignupMutation } from "@/store/api/authApi";
 import { setCredentials } from "@/store/slices/authSlice";
 import { toast } from "sonner";
 import { CheckCircle2, Rocket } from "lucide-react";
-
 export default function Auth() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { isAuthenticated } = useAppSelector((state) => state.auth);
-  const [login, { isLoading: isLoginLoading }] = useLoginMutation();
-  const [signup, { isLoading: isSignupLoading }] = useSignupMutation();
-
+  const {
+    isAuthenticated
+  } = useAppSelector(state => state.auth);
+  const [login, {
+    isLoading: isLoginLoading
+  }] = useLoginMutation();
+  const [signup, {
+    isLoading: isSignupLoading
+  }] = useSignupMutation();
   useEffect(() => {
     if (isAuthenticated) {
       navigate("/dashboard");
     }
   }, [isAuthenticated, navigate]);
-
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     try {
       const result = await login({
         email: formData.get("email") as string,
-        password: formData.get("password") as string,
+        password: formData.get("password") as string
       }).unwrap();
       dispatch(setCredentials(result));
       toast.success("Welcome back!");
@@ -40,7 +43,6 @@ export default function Auth() {
       toast.error(error?.data?.message || "Login failed");
     }
   };
-
   const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -48,7 +50,7 @@ export default function Auth() {
       const result = await signup({
         email: formData.get("email") as string,
         password: formData.get("password") as string,
-        username: formData.get("username") as string,
+        username: formData.get("username") as string
       }).unwrap();
       dispatch(setCredentials(result));
       toast.success("Account created successfully!");
@@ -57,20 +59,20 @@ export default function Auth() {
       toast.error(error?.data?.message || "Signup failed");
     }
   };
-
   const isLoading = isLoginLoading || isSignupLoading;
-
-  return (
-    <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
+  return <div className="min-h-screen flex items-center justify-center p-4 relative overflow-hidden">
       <div className="absolute inset-0 gradient-primary opacity-10"></div>
       
       <div className="w-full max-w-6xl grid lg:grid-cols-2 gap-12 items-center relative z-10">
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6 }}
-          className="hidden lg:block space-y-6"
-        >
+        <motion.div initial={{
+        opacity: 0,
+        x: -20
+      }} animate={{
+        opacity: 1,
+        x: 0
+      }} transition={{
+        duration: 0.6
+      }} className="hidden lg:block space-y-6">
           <div className="flex items-center gap-3 mb-8">
             <div className="w-12 h-12 rounded-xl gradient-primary flex items-center justify-center">
               <Rocket className="w-6 h-6 text-white" />
@@ -81,7 +83,7 @@ export default function Auth() {
           <h2 className="text-4xl font-bold leading-tight">
             Manage tasks with
             <br />
-            <span className="gradient-primary bg-clip-text text-transparent bg-primary">
+            <span className="gradient-primary bg-clip-text text-transparent bg-muted-foreground">
               intelligence & collaboration
             </span>
           </h2>
@@ -92,28 +94,32 @@ export default function Auth() {
           </p>
 
           <div className="space-y-4 pt-6">
-            {["Real-time collaboration", "AI-powered insights", "Smart task management", "Team chat included"].map((feature, i) => (
-              <motion.div
-                key={feature}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.2 + i * 0.1 }}
-                className="flex items-center gap-3"
-              >
+            {["Real-time collaboration", "AI-powered insights", "Smart task management", "Team chat included"].map((feature, i) => <motion.div key={feature} initial={{
+            opacity: 0,
+            x: -20
+          }} animate={{
+            opacity: 1,
+            x: 0
+          }} transition={{
+            delay: 0.2 + i * 0.1
+          }} className="flex items-center gap-3">
                 <div className="w-6 h-6 rounded-full bg-success/10 flex items-center justify-center">
                   <CheckCircle2 className="w-4 h-4 text-success" />
                 </div>
                 <span className="text-foreground">{feature}</span>
-              </motion.div>
-            ))}
+              </motion.div>)}
           </div>
         </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
+        <motion.div initial={{
+        opacity: 0,
+        y: 20
+      }} animate={{
+        opacity: 1,
+        y: 0
+      }} transition={{
+        duration: 0.6
+      }}>
           <Card className="shadow-custom-xl border-border/50 border-dotted opacity-100">
             <CardHeader className="space-y-1">
               <CardTitle className="text-2xl">Welcome</CardTitle>
@@ -166,6 +172,5 @@ export default function Auth() {
           </Card>
         </motion.div>
       </div>
-    </div>
-  );
+    </div>;
 }
