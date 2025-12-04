@@ -23,7 +23,7 @@ export function AppLayout() {
   const [logoutApi] = useLogoutMutation();
   const location = useLocation();
   const navigate = useNavigate();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const handleLogout = async () => {
     const refreshToken = localStorage.getItem("refreshToken");
@@ -48,10 +48,8 @@ export function AppLayout() {
     <div className="min-h-screen flex">
       <motion.aside
         initial={{ x: -300 }}
-        animate={{ x: 0 }}
-        className={`${
-          mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
-        } lg:translate-x-0 fixed lg:static inset-y-0 left-0 z-50 w-64 bg-card border-r border-border transition-transform duration-200`}
+        animate={{ x: sidebarOpen ? 0 : -256 }}
+        className={`fixed lg:fixed inset-y-0 left-0 z-50 w-64 bg-card border-r border-border transition-transform duration-200`}
       >
         <div className="flex flex-col h-full">
           <div className="p-6 border-b border-border flex items-center justify-between">
@@ -64,8 +62,7 @@ export function AppLayout() {
             <Button
               variant="ghost"
               size="icon"
-              className="lg:hidden"
-              onClick={() => setMobileMenuOpen(false)}
+              onClick={() => setSidebarOpen(false)}
             >
               <X className="w-5 h-5" />
             </Button>
@@ -107,23 +104,22 @@ export function AppLayout() {
         </div>
       </motion.aside>
 
-      {mobileMenuOpen && (
+      {sidebarOpen && (
         <div
           className="fixed inset-0 bg-background/80 backdrop-blur-sm z-40 lg:hidden"
-          onClick={() => setMobileMenuOpen(false)}
+          onClick={() => setSidebarOpen(false)}
         />
       )}
 
-      <div className="flex-1 flex flex-col min-w-0">
+      <div className={`flex-1 flex flex-col min-w-0 transition-all duration-200 ${sidebarOpen ? 'lg:ml-64' : 'ml-0'}`}>
         <header className="sticky top-0 z-30 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border">
           <div className="flex items-center justify-between px-6 py-4">
             <Button
               variant="ghost"
               size="icon"
-              className="lg:hidden"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              onClick={() => setSidebarOpen(!sidebarOpen)}
             >
-              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              <Menu className="w-5 h-5" />
             </Button>
             
             <div className="hidden lg:block">
