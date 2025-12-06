@@ -5,7 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { store } from "@/store";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
-import { AppLayout } from "@/components/AppLayout";
+import { DashboardLayout } from "@/components/DashboardLayout";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
@@ -22,22 +22,56 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
+          {/* Public routes */}
           <Route path="/" element={<Index />} />
           <Route path="/auth" element={<Auth />} />
+          
+          {/* Protected routes with PageLayout (back button + scroll bottom nav) */}
           <Route
-            path="/"
+            path="/tasks"
             element={
               <ProtectedRoute>
-                <AppLayout />
+                <Tasks />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/chat"
+            element={
+              <ProtectedRoute>
+                <Chat />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/settings"
+            element={
+              <ProtectedRoute>
+                <Settings />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute>
+                <AdminDashboard />
+              </ProtectedRoute>
+            }
+          />
+          
+          {/* Dashboard with sidebar layout */}
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <DashboardLayout />
               </ProtectedRoute>
             }
           >
-            <Route path="dashboard" element={<Dashboard />} />
-            <Route path="tasks" element={<Tasks />} />
-            <Route path="chat" element={<Chat />} />
-            <Route path="settings" element={<Settings />} />
-            <Route path="admin" element={<AdminDashboard />} />
+            <Route index element={<Dashboard />} />
           </Route>
+          
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
